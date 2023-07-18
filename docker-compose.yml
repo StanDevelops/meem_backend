@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mysql:
+    image: mysql/mysql-server:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: Kwtkh7&#U5M4#QY
+      MYSQL_DATABASE: Meem
+      MYSQL_USER: stan
+      MYSQL_PASSWORD: Kwtkh7&#U5M4#QY
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - mysqldb-backend
+  sonarqube:
+    image: sonarqube:latest
+    ports:
+      - "9000:9000"
+    networks:
+      - mysqldb-backend
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+      - sonarqube
+    volumes:
+      - app-data:/app
+    networks:
+      - mysqldb-backend
+volumes:
+  mysql-data:
+  app-data:
+networks:
+  mysqldb-backend:
